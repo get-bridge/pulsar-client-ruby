@@ -1,3 +1,5 @@
+**[This project is no longer under active development. It has been archived]**
+
 # Apache Pulsar Ruby client
 
 ## Installation
