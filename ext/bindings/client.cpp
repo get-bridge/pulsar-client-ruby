@@ -1,6 +1,7 @@
 #include "rice/Data_Type.hpp"
 #include "rice/Constructor.hpp"
 #include <pulsar/Client.h>
+#include <pulsar/FileLoggerFactory.h>
 #include <ruby/thread.h>
 
 #include "client.hpp"
@@ -53,12 +54,8 @@ void ClientConfiguration::setConcurrentLookupRequest(int n) {
   _config.setConcurrentLookupRequest(n);
 }
 
-std::string ClientConfiguration::getLogConfFilePath() {
-  return _config.getLogConfFilePath();
-}
-
 void ClientConfiguration::setLogConfFilePath(const std::string& path) {
-  _config.setLogConfFilePath(path);
+  _config.setLogger(new pulsar::FileLoggerFactory(pulsar::Logger::LEVEL_INFO, path));
 }
 
 void ClientConfiguration::setSilentLogging(bool enable) {
@@ -214,7 +211,6 @@ void bind_client(Module& module) {
     .define_method("message_listener_threads=", &pulsar_rb::ClientConfiguration::setMessageListenerThreads)
     .define_method("concurrent_lookup_requests", &pulsar_rb::ClientConfiguration::getConcurrentLookupRequest)
     .define_method("concurrent_lookup_requests=", &pulsar_rb::ClientConfiguration::setConcurrentLookupRequest)
-    .define_method("log_conf_file_path", &pulsar_rb::ClientConfiguration::getLogConfFilePath)
     .define_method("log_conf_file_path=", &pulsar_rb::ClientConfiguration::setLogConfFilePath)
     .define_method("silent_logging?", &pulsar_rb::ClientConfiguration::getSilentLogging)
     .define_method("silent_logging=", &pulsar_rb::ClientConfiguration::setSilentLogging)
