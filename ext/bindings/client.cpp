@@ -2,7 +2,6 @@
 #include "rice/Constructor.hpp"
 #include <pulsar/Client.h>
 #include <pulsar/FileLoggerFactory.h>
-#include <pulsar/Version.h>
 #include <ruby/thread.h>
 
 #include "client.hpp"
@@ -79,33 +78,19 @@ bool ClientConfiguration::getSilentLogging() {
 }
 
 bool ClientConfiguration::isUseTls() {
-#if PULSAR_VERSION >= 4000000
   return _useTls;
-#else
-  return _config.isUseTls();
-#endif
 }
 
 void ClientConfiguration::setUseTls(bool enable) {
-#if PULSAR_VERSION >= 4000000
   _useTls = enable;
-#else
-  _config.setUseTls(enable);
-#endif
 }
 
 std::string ClientConfiguration::getTlsTrustCertsFilePath() {
-#if PULSAR_VERSION >= 4000000
   return _tlsTrustCertsFilePath;
-#else
-  return _config.getTlsTrustCertsFilePath();
-#endif
 }
 
 void ClientConfiguration::setTlsTrustCertsFilePath(const std::string& path) {
-#if PULSAR_VERSION >= 4000000
   _tlsTrustCertsFilePath = path;
-#endif
   _config.setTlsTrustCertsFilePath(path);
 }
 
