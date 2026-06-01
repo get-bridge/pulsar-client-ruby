@@ -110,7 +110,15 @@ void ClientConfiguration::setValidateHostName(bool enable) {
   _config.setValidateHostName(enable);
 }
 
-Client::Client(Rice::String service_url, const ClientConfiguration& config) : _client(service_url.str(), config._config) {
+static std::string maybe_enable_tls(const std::string& url, bool use_tls) {
+  if (use_tls && url.substr(0, 9) == "pulsar://") {
+    return "pulsar+ssl://" + url.substr(9);
+  }
+  return url;
+}
+
+Client::Client(Rice::String service_url, const ClientConfiguration& config)
+  : _client(maybe_enable_tls(service_url.str(), config._useTls), config._config) {
 }
 
 typedef struct {
