@@ -34,6 +34,10 @@ namespace pulsar_rb {
     void setUseTls(bool enable);
     std::string getTlsTrustCertsFilePath();
     void setTlsTrustCertsFilePath(const std::string& path);
+  private:
+    bool _useTls = false;
+    std::string _tlsTrustCertsFilePath;
+  public:
     bool isTlsAllowInsecureConnection();
     void setTlsAllowInsecureConnection(bool enable);
     bool isValidateHostName();
