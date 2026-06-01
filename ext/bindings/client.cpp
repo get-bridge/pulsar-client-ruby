@@ -77,7 +77,7 @@ bool ClientConfiguration::getSilentLogging() {
   return silentLogging;
 }
 
-bool ClientConfiguration::isUseTls() {
+bool ClientConfiguration::isUseTls() const {
   return _useTls;
 }
 
@@ -85,7 +85,7 @@ void ClientConfiguration::setUseTls(bool enable) {
   _useTls = enable;
 }
 
-std::string ClientConfiguration::getTlsTrustCertsFilePath() {
+std::string ClientConfiguration::getTlsTrustCertsFilePath() const {
   return _tlsTrustCertsFilePath;
 }
 
@@ -118,7 +118,7 @@ static std::string maybe_enable_tls(const std::string& url, bool use_tls) {
 }
 
 Client::Client(Rice::String service_url, const ClientConfiguration& config)
-  : _client(maybe_enable_tls(service_url.str(), config._useTls), config._config) {
+  : _client(maybe_enable_tls(service_url.str(), config.isUseTls()), config._config) {
 }
 
 typedef struct {

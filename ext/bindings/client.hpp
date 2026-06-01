@@ -30,9 +30,9 @@ namespace pulsar_rb {
     void setLogConfFilePath(const std::string& path);
     void setSilentLogging(bool);
     bool getSilentLogging();
-    bool isUseTls();
+    bool isUseTls() const;
     void setUseTls(bool enable);
-    std::string getTlsTrustCertsFilePath();
+    std::string getTlsTrustCertsFilePath() const;
     void setTlsTrustCertsFilePath(const std::string& path);
   private:
     bool _useTls = false;
