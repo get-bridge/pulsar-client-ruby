@@ -39,7 +39,6 @@ module Pulsar
     def self.from_environment(config={}, environment=ENV.to_h)
       environment_config = {}
       if environment.has_key?('PULSAR_CERT_PATH')
-        environment_config[:use_tls] = true
         environment_config[:tls_allow_insecure_connection] = false
         environment_config[:tls_validate_hostname] = false
         environment_config[:tls_trust_certs_file_path] = environment['PULSAR_CERT_PATH']
@@ -66,7 +65,6 @@ module Pulsar
 
       # If a TLS certificate had been given, use it
       if pulsar_config.has_key? 'tlsTrustCertsFilePath'
-        client_config[:use_tls] = true
         client_config[:tls_trust_certs_file_path] = pulsar_config['tlsTrustCertsFilePath']
       end
       # If 'TLS enable hostname verification' is false, then switch it off in config
@@ -139,7 +137,6 @@ module Pulsar
       populate_one(config, :concurrent_lookup_requests)
       populate_one(config, :log_conf_file_path)
       populate_one(config, :silent_logging)
-      populate_one(config, :use_tls)
       populate_one(config, :tls_trust_certs_file_path)
       populate_one(config, :tls_allow_insecure_connection)
       populate_one(config, :tls_validate_hostname)

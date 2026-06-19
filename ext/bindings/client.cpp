@@ -77,19 +77,12 @@ bool ClientConfiguration::getSilentLogging() {
   return silentLogging;
 }
 
-bool ClientConfiguration::isUseTls() {
-  return _config.isUseTls();
-}
-
-void ClientConfiguration::setUseTls(bool enable) {
-  _config.setUseTls(enable);
-}
-
 std::string ClientConfiguration::getTlsTrustCertsFilePath() {
-  return _config.getTlsTrustCertsFilePath();
+  return tlsTrustCertsFilePath;
 }
 
 void ClientConfiguration::setTlsTrustCertsFilePath(const std::string& path) {
+  tlsTrustCertsFilePath = path;
   _config.setTlsTrustCertsFilePath(path);
 }
 
@@ -214,8 +207,6 @@ void bind_client(Module& module) {
     .define_method("log_conf_file_path=", &pulsar_rb::ClientConfiguration::setLogConfFilePath)
     .define_method("silent_logging?", &pulsar_rb::ClientConfiguration::getSilentLogging)
     .define_method("silent_logging=", &pulsar_rb::ClientConfiguration::setSilentLogging)
-    .define_method("use_tls?", &pulsar_rb::ClientConfiguration::isUseTls)
-    .define_method("use_tls=", &pulsar_rb::ClientConfiguration::setUseTls)
     .define_method("tls_trust_certs_file_path", &pulsar_rb::ClientConfiguration::getTlsTrustCertsFilePath)
     .define_method("tls_trust_certs_file_path=", &pulsar_rb::ClientConfiguration::setTlsTrustCertsFilePath)
     .define_method("tls_allow_insecure_connection?", &pulsar_rb::ClientConfiguration::isTlsAllowInsecureConnection)
