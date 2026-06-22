@@ -24,6 +24,6 @@ client_header = File.join(include_dir.to_s, 'pulsar', 'Client.h')
 abort 'libpulsar headers not found' unless File.exist?(client_header)
 abort 'libpulsar library not found' unless have_library('pulsar')
 
-$CXXFLAGS += ' -std=c++17 '
+$CXXFLAGS += ' -std=c++17 ' unless $CXXFLAGS.include?('-std=')
 
 create_makefile('pulsar/bindings')
