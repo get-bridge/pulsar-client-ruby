@@ -40,6 +40,10 @@ Setup and basic `consumer.receive` example:
 # export PULSAR_AUTH_TOKEN=your-auth-token
 # export PULSAR_AUTH_OAUTH2_PARAMS=your-oauth2-params
 
+# TLS is handled by the broker URL and TLS-specific options such as
+# PULSAR_CERT_PATH. The client no longer exposes a separate `use_tls`
+# toggle.
+
 # create client using values from environment
 client = Pulsar::Client.from_environment
 
@@ -88,6 +92,10 @@ listenerThread.join # wait for the thread to finish
 
 ## Development
 
+If you are using `mise` on current macOS, this repo includes a repo-local
+Ruby 3.1.7 patch for the missing `socket` extension issue discussed in
+`jdx/mise#9703`. Run `mise install` from the repo root before `bundle install`.
+
 If your ruby is not already compiled with `--enable-shared`, you'll need
 to rebuild it. Example for rbenv:
 
@@ -100,6 +108,29 @@ automake for the compilation and linking to work. Example with brew:
 
 ```
 brew install libpulsar automake
+```
+
+On Ubuntu, install the Pulsar client runtime and headers plus build
+tools before running Bundler. For example:
+
+```
+sudo apt-get update
+sudo apt-get install -y automake libpulsar libpulsar-dev
+```
+
+If your distro installs `libpulsar` outside standard system paths, pass
+the location through extconf options such as
+`--with-pulsar-dir=/custom/prefix`.
+
+To verify the Linux build in the provided Ubuntu-based container image,
+run:
+
+```
+docker run --rm --entrypoint /bin/bash \
+  -v "$PWD:/workspace" \
+  -w /workspace \
+  127178877223.dkr.ecr.us-east-2.amazonaws.com/learn-test/learn-base-image:1774966705 \
+  -lc 'bundle install && bundle exec rake compile && bundle exec ruby -e "require "'"'pulsar/client'"'"'; puts Pulsar::Client::VERSION"'
 ```
 
 Next, run `bin/setup` to install dependencies -- Rice in particular.

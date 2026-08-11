@@ -1,0 +1,17 @@
+diff --git a/ext/socket/extconf.rb b/ext/socket/extconf.rb
+--- a/ext/socket/extconf.rb
++++ b/ext/socket/extconf.rb
+@@ -660,5 +660,12 @@
+ int t(struct in6_addr *addr) {return IN6_IS_ADDR_UNSPECIFIED(addr);}
+ SRC
+     print "fixing apple's netinet6/in6.h ..."; $stdout.flush
+-    in6 = File.read("/usr/include/#{hdr}")
++    file = xpopen(%w"clang -include netinet/in.h -E -xc -", in: IO::NULL) do |f|
++      re = %r[^# *\d+ *"(.*/netinet/in\.h)"]
++      Logging.message "  grep(#{re})\n"
++      f.read[re, 1]
++    end
++    Logging.message "Substitute from #{file}\n"
++
++    in6 = File.read(file)
+     if in6.gsub!(/\*\(const\s+__uint32_t\s+\*\)\(const\s+void\s+\*\)\(&\(\(\w+\)\)->s6_addr\[(\d+)\]\)/) do

@@ -32,7 +32,6 @@ RSpec.describe Pulsar::ClientConfiguration do
       'PULSAR_CERT_PATH' => '/path/to/cert.pem'
     }
     config = Pulsar::ClientConfiguration.from_environment({}, test_env)
-    expect(config[:use_tls]).to eq(true)
     expect(config[:tls_allow_insecure_connection]).to eq(false)
     expect(config[:tls_validate_hostname]).to eq(false)
     expect(config[:tls_trust_certs_file_path]).to eq('/path/to/cert.pem')
@@ -116,7 +115,6 @@ RSpec.describe Pulsar::ClientConfiguration do
       expect(config[:tls_allow_insecure_connection]).to eq(false)
       expect(config[:tls_validate_hostname]).to eq(false)
       expect(config[:tls_trust_certs_file_path]).to eq('/test/cert/file/ca.pem')
-      expect(config[:use_tls]).to eq(true)
     ensure
       test_config.unlink
       test_token.unlink
@@ -133,7 +131,6 @@ RSpec.describe Pulsar::ClientConfiguration do
     expect(config[:tls_allow_insecure_connection]).to eq(nil)
     expect(config[:tls_validate_hostname]).to eq(nil)
     expect(config[:tls_trust_certs_file_path]).to eq(nil)
-    expect(config[:use_tls]).to eq(nil)
   end
 
   it 'handle when token file is not found without exceptions' do
