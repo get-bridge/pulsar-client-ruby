@@ -77,19 +77,20 @@ bool ClientConfiguration::getSilentLogging() {
   return silentLogging;
 }
 
-bool ClientConfiguration::isUseTls() {
-  return _config.isUseTls();
+bool ClientConfiguration::isUseTls() const {
+  return _useTls;
 }
 
 void ClientConfiguration::setUseTls(bool enable) {
-  _config.setUseTls(enable);
+  _useTls = enable;
 }
 
-std::string ClientConfiguration::getTlsTrustCertsFilePath() {
-  return _config.getTlsTrustCertsFilePath();
+std::string ClientConfiguration::getTlsTrustCertsFilePath() const {
+  return _tlsTrustCertsFilePath;
 }
 
 void ClientConfiguration::setTlsTrustCertsFilePath(const std::string& path) {
+  _tlsTrustCertsFilePath = path;
   _config.setTlsTrustCertsFilePath(path);
 }
 
@@ -109,7 +110,15 @@ void ClientConfiguration::setValidateHostName(bool enable) {
   _config.setValidateHostName(enable);
 }
 
-Client::Client(Rice::String service_url, const ClientConfiguration& config) : _client(service_url.str(), config._config) {
+static std::string maybe_enable_tls(const std::string& url, bool use_tls) {
+  if (use_tls && url.substr(0, 9) == "pulsar://") {
+    return "pulsar+ssl://" + url.substr(9);
+  }
+  return url;
+}
+
+Client::Client(Rice::String service_url, const ClientConfiguration& config)
+  : _client(maybe_enable_tls(service_url.str(), config.isUseTls()), config._config) {
 }
 
 typedef struct {
